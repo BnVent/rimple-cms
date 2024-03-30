@@ -17,6 +17,26 @@ const getFormattedDateNow = () => {
   return formattedDate;
 };
 
+const importMarkdownFile = () =>
+  new Promise((resolve) => {
+    const filePicker = document.createElement("input");
+    const fileReader = new FileReader();
+
+    filePicker.type = "file";
+    filePicker.style.visibility = "hidden";
+    document.body.appendChild(filePicker);
+    filePicker.click();
+
+    filePicker.onchange = (event) => {
+      const file = event.target.files[0];
+      fileReader.readAsText(file);
+    };
+
+    fileReader.addEventListener("load", (event) => {
+      resolve(event.target.result);
+    });
+  });
+
 export default function PostsCreationModal({ closeModalHandler }) {
   const [postTitle, setPostTitle] = useState("");
   const [postFilename, setPostFilename] = useState("");
@@ -26,7 +46,7 @@ export default function PostsCreationModal({ closeModalHandler }) {
 
   const setPostFilenameHandler = (value) => {
     const regex = /^[0-9a-zA-Z\-]+$/;
-    if (regex.test(value) || value == "") setPostFilename(value);
+    if (regex.test(value) || value == "") setPostFilename(value.toLowerCase());
   };
 
   const setPostTitleHandler = (value) => {
@@ -49,13 +69,17 @@ export default function PostsCreationModal({ closeModalHandler }) {
 
   const refreshDateHandler = () => setPostDate(getFormattedDateNow());
 
+  const importMarkdownHandler = () => {
+    importMarkdownFile().then(result => setPostBody(result))
+  };
+
   return (
     <>
       <div id="background-opacity-layer" onClick={closeModalHandler}></div>
       <article id="post-creation-modal">
         <div id="post-creation-modal-header">
           <h1>Create new post</h1>
-          <button>Import Markdown file</button>
+          <button onClick={importMarkdownHandler}>Import Markdown file</button>
         </div>
         <hr />
         <div id="post-creation-title-container">
