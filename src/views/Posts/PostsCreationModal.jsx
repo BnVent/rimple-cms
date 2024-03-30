@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { getFormattedDateNow, importMarkdownFile } from "./utils.js";
 
-export default function PostsCreationModal({ closeModalHandler }) {
+export default function PostsCreationModal({ closeModalHandler, addNewPost }) {
   const [postTitle, setPostTitle] = useState("");
   const [postFilename, setPostFilename] = useState("");
   const [postBody, setPostBody] = useState("");
@@ -35,10 +35,25 @@ export default function PostsCreationModal({ closeModalHandler }) {
   const refreshDateHandler = () => setPostDate(getFormattedDateNow());
 
   const importMarkdownHandler = () => {
-    importMarkdownFile().then(result => setPostBody(result))
+    importMarkdownFile().then((result) => setPostBody(result));
   };
 
-  const checkForDisabledSave = () => postTitle == "" || postFilename == "" || postBody == ""
+  const checkForDisabledSave = () => postTitle == "" || postFilename == "" || postBody == "";
+
+  const addNewPostHandler = () => {
+    // Add post
+    addNewPost({ title: postTitle, date: new Date(postDate).getTime(), tagsArray: postTags, body: postBody });
+
+    // Clear data
+    setPostTitle("");
+    setPostBody("");
+    setPostFilename("");
+    setPostTags([]);
+    setPostDate("");
+
+    // Close
+    closeModalHandler();
+  };
 
   return (
     <>
@@ -90,7 +105,9 @@ export default function PostsCreationModal({ closeModalHandler }) {
         </div>
         <br />
         <div className="buttons-container">
-          <button disabled={checkForDisabledSave()}>Save</button>
+          <button disabled={checkForDisabledSave()} onClick={addNewPostHandler}>
+            Save
+          </button>
           <button onClick={closeModalHandler}>Cancel</button>
         </div>
       </article>

@@ -1,31 +1,27 @@
 import React, { useState } from "react";
 import PostsCreationModal from "./PostsCreationModal";
 
-import "./Posts.css"
+import "./Posts.css";
 
-const posts = [];
-
-const mapPosts = () => {
-  if (posts.length == 0)
+const mapPosts = (postsArray) => {
+  if (postsArray.length == 0)
     return (
       <tr>
         <td>NO POSTS</td>
         <td>-/-</td>
         <td>-/-</td>
-        <td>-/-</td>
       </tr>
     );
 
-  return posts.map((data, index) => {
+  return postsArray.map((data, index) => {
     const getLocaleDate = () => new Date(data.date).toLocaleDateString();
-    const getTags = () => (data.tags.length == 0 ? "Sin etiquetas" : data.tags.join(", "));
+    const getTags = () => (data.tagsArray.length == 0 ? "Sin etiquetas" : data.tagsArray.join(", "));
 
     return (
       <tr key={index}>
         <td>{data.title}</td>
         <td>{getLocaleDate()}</td>
         <td>{getTags()}</td>
-        <td>{data.meta}</td>
       </tr>
     );
   });
@@ -33,6 +29,11 @@ const mapPosts = () => {
 
 export default function Posts() {
   const [createNewPost, setCreateNewPost] = useState(false);
+  const [postsArray, setPostsArray] = useState([]);
+
+  const addPostHandler = (postData = { title: "", date: "", tagsArray: "", body: "" }) => {
+    setPostsArray((prevState) => [...prevState, postData]);
+  };
 
   return (
     <div>
@@ -45,14 +46,11 @@ export default function Posts() {
             <th>Title</th>
             <th>Date</th>
             <th>Tags</th>
-            <th>Meta</th>
           </tr>
         </thead>
-        <tbody>
-          {mapPosts()}
-        </tbody>
+        <tbody>{mapPosts(postsArray)}</tbody>
       </table>
-      {createNewPost && <PostsCreationModal closeModalHandler={() => setCreateNewPost(false)} />}
+      {createNewPost && <PostsCreationModal closeModalHandler={() => setCreateNewPost(false)} addNewPost={addPostHandler} />}
     </div>
   );
 }
