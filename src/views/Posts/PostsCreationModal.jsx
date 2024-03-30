@@ -38,6 +38,8 @@ export default function PostsCreationModal({ closeModalHandler }) {
     importMarkdownFile().then(result => setPostBody(result))
   };
 
+  const checkForDisabledSave = () => postTitle == "" || postFilename == "" || postBody == ""
+
   return (
     <>
       <div id="background-opacity-layer" onClick={closeModalHandler}></div>
@@ -88,7 +90,7 @@ export default function PostsCreationModal({ closeModalHandler }) {
         </div>
         <br />
         <div className="buttons-container">
-          <button>Save</button>
+          <button disabled={checkForDisabledSave()}>Save</button>
           <button onClick={closeModalHandler}>Cancel</button>
         </div>
       </article>
