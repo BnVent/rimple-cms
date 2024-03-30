@@ -3,7 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 
 import "./App.css";
 
-import Posts from "./views/Posts";
+import Posts from "./views/Posts/Posts";
 import Pages from "./views/Pages";
 import Styles from "./views/Styles";
 import Scripts from "./views/Scripts";

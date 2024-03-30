@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import PostsCreationModal from "./PostsCreationModal";
+
+import "./Posts.css"
 
 const posts = [];
 
@@ -29,10 +32,13 @@ const mapPosts = () => {
 };
 
 export default function Posts() {
+  const [createNewPost, setCreateNewPost] = useState(false);
+
   return (
     <div>
       <h1>Posts</h1>
       <hr />
+      <button onClick={() => setCreateNewPost(true)}>Create new post +</button>
       <table id="posts-table">
         <thead>
           <tr>
@@ -42,8 +48,11 @@ export default function Posts() {
             <th>Meta</th>
           </tr>
         </thead>
-        <tbody>{mapPosts()}</tbody>
+        <tbody>
+          {mapPosts()}
+        </tbody>
       </table>
+      {createNewPost && <PostsCreationModal closeModalHandler={() => setCreateNewPost(false)} />}
     </div>
   );
 }
