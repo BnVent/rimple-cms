@@ -87,37 +87,6 @@ export default function PostsCreationModal({ closeModalHandler }) {
           <button onClick={refreshDateHandler}>Refresh</button>
         </div>
         <br />
-        <details>
-          <summary>Metadata (2)</summary>
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>
-                  <input name="title" type="text" />
-                </td>
-                <td>
-                  <input type="text" name="filename" />
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <input type="text" name="" id="" />
-                </td>
-                <td>
-                  <input type="text" name="" id="" />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <a href="">(View complete list of metadata)</a>
-        </details>
-        <br />
         <div className="buttons-container">
           <button>Save</button>
           <button onClick={closeModalHandler}>Cancel</button>
