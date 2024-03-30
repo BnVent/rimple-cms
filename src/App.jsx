@@ -1,5 +1,5 @@
-import { Route, Routes, useLocation, useNavigate, useParams } from "react-router";
-import { Link, useSearchParams } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router";
+import { Link } from "react-router-dom";
 
 import "./App.css";
 
@@ -21,11 +21,11 @@ function App() {
         <h1>Rimple-CMS</h1>
         <hr />
         <ul>
-          <li class={geActiveClass("/")}><Link to="/">Posts</Link></li>
-          <li class={geActiveClass("/pages")}><Link to="/pages">Pages</Link></li>
-          <li class={geActiveClass("/styles")}><Link to="/styles">Styles</Link></li>
-          <li class={geActiveClass("/scripts")}><Link to="/scripts">Scripts</Link></li>
-          <li class={geActiveClass("/settings")}><Link to="/settings">Settings</Link></li>
+          <li className={geActiveClass("/")}><Link to="/">Posts</Link></li>
+          <li className={geActiveClass("/pages")}><Link to="/pages">Pages</Link></li>
+          <li className={geActiveClass("/styles")}><Link to="/styles">Styles</Link></li>
+          <li className={geActiveClass("/scripts")}><Link to="/scripts">Scripts</Link></li>
+          <li className={geActiveClass("/settings")}><Link to="/settings">Settings</Link></li>
         </ul>
       </nav>
 
