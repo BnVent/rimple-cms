@@ -8,6 +8,7 @@ export default function PostsCreationModal({ closeModalHandler, addNewPost, post
   const [postBody, setPostBody] = useState("");
   const [postDate, setPostDate] = useState(getFormattedDateNow());
   const [postTags, setPostTags] = useState([]);
+  const [tagsStringValue, setTagsStringValue] = useState("")
   const [editModeON, setEditModeON] = useState(false)
 
   const [UID, setUID] = useState(new Date().getTime()) // For now, the ms time is enough for create a basic UID
@@ -16,6 +17,7 @@ export default function PostsCreationModal({ closeModalHandler, addNewPost, post
     if(postData !== null){
       setPostTitle(postData.title)
       setPostTags(postData.tagsArray)
+      setTagsStringValue(postData.tagsArray.toString())
       setPostBody(postData.body)
       setPostTitleHandler(postData.title)
       setPostDate(getFormattedDateNow(postData.date))
@@ -36,13 +38,14 @@ export default function PostsCreationModal({ closeModalHandler, addNewPost, post
     setPostFilenameHandler(finalTitle);
   };
 
-  const setPostTagsHandler = (value) => {
-    if (value == "") {
+  const setPostTagsHandler = (stringValue) => {
+    setTagsStringValue(stringValue)
+    if (stringValue == "") {
       setPostTags([]);
       return;
     }
 
-    let formattedValue = value.replace(/[^\w\-\,]/g, "");
+    let formattedValue = stringValue.replace(/[^\w\-\,]/g, "");
     let tagsArray = formattedValue.split(",");
     setPostTags(tagsArray);
   };
@@ -110,6 +113,7 @@ export default function PostsCreationModal({ closeModalHandler, addNewPost, post
             name=""
             id=""
             placeholder="Tags separated by comma"
+            value={tagsStringValue}
             onChange={(event) => setPostTagsHandler(event.target.value)}
             disabled={editModeON}
           />
