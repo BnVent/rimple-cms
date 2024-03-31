@@ -31,7 +31,7 @@ export default function Posts() {
   const [createNewPost, setCreateNewPost] = useState(false);
   const [postsArray, setPostsArray] = useState([]);
 
-  const addPostHandler = (postData = { title: "", date: "", tagsArray: "", body: "" }) => {
+  const addPostHandler = (postData = { UID: "", title: "", date: "", tagsArray: "", body: "" }) => {
     setPostsArray((prevState) => [...prevState, postData]);
   };
 

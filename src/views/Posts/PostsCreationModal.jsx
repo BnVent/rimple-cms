@@ -8,6 +8,7 @@ export default function PostsCreationModal({ closeModalHandler, addNewPost }) {
   const [postBody, setPostBody] = useState("");
   const [postDate, setPostDate] = useState(getFormattedDateNow());
   const [postTags, setPostTags] = useState([]);
+  const [UID, setUID] = useState(new Date().getTime()) // For now, the ms time is enough for create a basic UID
 
   const setPostFilenameHandler = (value) => {
     const regex = /^[0-9a-zA-Z\-]+$/;
@@ -42,7 +43,7 @@ export default function PostsCreationModal({ closeModalHandler, addNewPost }) {
 
   const addNewPostHandler = () => {
     // Add post
-    addNewPost({ title: postTitle, date: new Date(postDate).getTime(), tagsArray: postTags, body: postBody });
+    addNewPost({ UID: UID, title: postTitle, date: new Date(postDate).getTime(), tagsArray: postTags, body: postBody });
 
     // Clear data
     setPostTitle("");
