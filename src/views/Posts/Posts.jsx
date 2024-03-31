@@ -14,13 +14,22 @@ const mapPosts = (postsArray, launchPostCreationModalWith) => {
     );
 
   return postsArray.map((data, index) => {
-    const getLocaleDate = () => new Date(data.date).toLocaleDateString();
+    const getLocaleDate = () =>
+      new Date(data.date).toLocaleDateString(undefined, {
+        weekday: "short",
+        day: "numeric",
+        month: "numeric",
+        year: "numeric",
+      }).toUpperCase
+    const getLocaleTime = () => new Date(data.date).toLocaleTimeString().slice(0, 5);
     const getTags = () => (data.tagsArray.length == 0 ? "Sin etiquetas" : data.tagsArray.join(", "));
 
     return (
-      <tr key={index} onClick={() => launchPostCreationModalWith(data)}>
+      <tr key={index} onClick={() => launchPostCreationModalWith(data)} className="post">
         <td>{data.title}</td>
-        <td>{getLocaleDate()}</td>
+        <td>
+          {getLocaleDate()} ({getLocaleTime()})
+        </td>
         <td>{getTags()}</td>
       </tr>
     );

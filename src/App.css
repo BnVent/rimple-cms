@@ -37,31 +37,6 @@ nav li.active{
   text-decoration: underline;
 }
 
-#posts-table{
-  width: 100%;
-  border-collapse: collapse;
-  margin: 0.5rem 0;
-}
-
-#posts-table thead th{
-  font-weight: bold;
-  color: #FFF;
-  background-color: #000;
-  border: 2px solid gray;
-  text-align: left;
-  padding: 0.5rem 1rem;
-}
-
-#posts-table tbody td{
-  border: 2px solid gray;
-  padding: 0.5rem 1rem;
-}
-
-#posts-table tbody tr:hover{
-  cursor: pointer;
-  background-color: #DBDBDB;
-}
-
 h1{
   padding: 0;
   margin: 0;
