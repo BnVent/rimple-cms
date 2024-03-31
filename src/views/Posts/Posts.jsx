@@ -3,7 +3,7 @@ import PostsCreationModal from "./PostsCreationModal";
 
 import "./Posts.css";
 
-const mapPosts = (postsArray) => {
+const mapPosts = (postsArray, launchPostCreationModalWith) => {
   if (postsArray.length == 0)
     return (
       <tr>
@@ -18,7 +18,7 @@ const mapPosts = (postsArray) => {
     const getTags = () => (data.tagsArray.length == 0 ? "Sin etiquetas" : data.tagsArray.join(", "));
 
     return (
-      <tr key={index}>
+      <tr key={index} onClick={() => launchPostCreationModalWith(data)}>
         <td>{data.title}</td>
         <td>{getLocaleDate()}</td>
         <td>{getTags()}</td>
@@ -30,10 +30,39 @@ const mapPosts = (postsArray) => {
 export default function Posts() {
   const [createNewPost, setCreateNewPost] = useState(false);
   const [postsArray, setPostsArray] = useState([]);
+  const [editPostData, setEditPostData] = useState(null)
 
   const addPostHandler = (postData = { UID: "", title: "", date: "", tagsArray: "", body: "" }) => {
-    setPostsArray((prevState) => [...prevState, postData]);
+
+    setPostsArray((prevState) => {
+
+      let edited = false
+
+      prevState.find((post) => {
+        if(post.UID == postData.UID){
+          edited = true
+          post.title = postData.title
+          post.date = postData.date
+          post.tagsArray = postData.tagsArray
+          post.body = postData.body
+        }
+      })
+      
+      if(edited) return [...prevState]
+      else return [...prevState, postData]
+    });
+    setEditPostData(null) // Clearing in case of post edition
   };
+
+  const launchPostCreationModalWith = data => {
+    setEditPostData(data)
+    setCreateNewPost(true)
+  }
+
+  const closeModalHandler = () => {
+    setCreateNewPost(false)
+    setEditPostData(null)
+  }
 
   return (
     <div>
@@ -48,9 +77,9 @@ export default function Posts() {
             <th>Tags</th>
           </tr>
         </thead>
-        <tbody>{mapPosts(postsArray)}</tbody>
+        <tbody>{mapPosts(postsArray, launchPostCreationModalWith)}</tbody>
       </table>
-      {createNewPost && <PostsCreationModal closeModalHandler={() => setCreateNewPost(false)} addNewPost={addPostHandler} />}
+      {createNewPost && <PostsCreationModal postData={editPostData} closeModalHandler={closeModalHandler} addNewPost={addPostHandler} />}
     </div>
   );
 }

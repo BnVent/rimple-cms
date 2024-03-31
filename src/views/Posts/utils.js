@@ -18,8 +18,8 @@ const importMarkdownFile = () =>
     });
   });
 
-const getFormattedDateNow = () => {
-  const dateNow = new Date();
+const getFormattedDateNow = (optionalDate) => {
+  const dateNow = optionalDate ? new Date(optionalDate) : new Date() 
 
   const year = dateNow.getFullYear();
   const month = dateNow.getMonth();

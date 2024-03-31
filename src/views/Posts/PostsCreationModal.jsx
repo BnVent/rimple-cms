@@ -1,16 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { getFormattedDateNow, importMarkdownFile } from "./utils.js";
 
-export default function PostsCreationModal({ closeModalHandler, addNewPost }) {
+export default function PostsCreationModal({ closeModalHandler, addNewPost, postData = null }) {
   const [postTitle, setPostTitle] = useState("");
   const [postFilename, setPostFilename] = useState("");
   const [postBody, setPostBody] = useState("");
   const [postDate, setPostDate] = useState(getFormattedDateNow());
   const [postTags, setPostTags] = useState([]);
+  const [editModeON, setEditModeON] = useState(false)
+
   const [UID, setUID] = useState(new Date().getTime()) // For now, the ms time is enough for create a basic UID
 
-  const setPostFilenameHandler = (value) => {
+  useEffect(() => {
+    if(postData !== null){
+      setPostTitle(postData.title)
+      setPostTags(postData.tagsArray)
+      setPostBody(postData.body)
+      setPostTitleHandler(postData.title)
+      setPostDate(getFormattedDateNow(postData.date))
+      setUID(postData.UID)
+      setEditModeON(true)
+    }
+  }, [])
+
+  function setPostFilenameHandler(value){
     const regex = /^[0-9a-zA-Z\-]+$/;
     if (regex.test(value) || value == "") setPostFilename(value.toLowerCase());
   };
@@ -62,7 +76,7 @@ export default function PostsCreationModal({ closeModalHandler, addNewPost }) {
       <article id="post-creation-modal">
         <div id="post-creation-modal-header">
           <h1>Create new post</h1>
-          <button onClick={importMarkdownHandler}>Import Markdown file</button>
+          <button onClick={importMarkdownHandler} disabled={editModeON}>Import Markdown file</button>
         </div>
         <hr />
         <div id="post-creation-title-container">
@@ -72,6 +86,7 @@ export default function PostsCreationModal({ closeModalHandler, addNewPost }) {
             value={postTitle}
             onChange={(event) => setPostTitleHandler(event.target.value)}
             placeholder="Insert post title..."
+            disabled={editModeON}
           />
           <input
             type="text"
@@ -79,12 +94,14 @@ export default function PostsCreationModal({ closeModalHandler, addNewPost }) {
             value={postFilename}
             onChange={(event) => setPostFilenameHandler(event.target.value)}
             placeholder="Insert file-name..."
+            disabled={editModeON}
           />
         </div>
         <textarea
           placeholder="Add post content in Markdown format..."
           value={postBody}
           onChange={(event) => setPostBody(event.target.value)}
+          disabled={editModeON}
         ></textarea>
         <br />
         <div id="tags-input-container">
@@ -94,19 +111,21 @@ export default function PostsCreationModal({ closeModalHandler, addNewPost }) {
             id=""
             placeholder="Tags separated by comma"
             onChange={(event) => setPostTagsHandler(event.target.value)}
+            disabled={editModeON}
           />
           {postTags.length >= 1 ? <span>{postTags.toString()}</span> : <span>Insert tags...</span>}
           <a href="">(View tags list)</a>
         </div>
         <br />
         <div id="date-input-container">
-          <input type="datetime-local" name="" id="" value={postDate} onChange={(event) => setPostDate(event.target.value)} />
+          <input type="datetime-local" name="" id="" value={postDate} onChange={(event) => setPostDate(event.target.value)}  disabled={editModeON} />
           <span>Publication date</span>
-          <button onClick={refreshDateHandler}>Refresh</button>
+          <button onClick={refreshDateHandler} disabled={editModeON}>Refresh</button>
         </div>
         <br />
         <div className="buttons-container">
-          <button disabled={checkForDisabledSave()} onClick={addNewPostHandler}>
+          {editModeON && <button onClick={() => setEditModeON(false)}>Edit this post</button>}
+          <button disabled={checkForDisabledSave() || editModeON} onClick={addNewPostHandler}>
             Save
           </button>
           <button onClick={closeModalHandler}>Cancel</button>
