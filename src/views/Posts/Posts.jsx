@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PostsCreationModal from "./PostsCreationModal";
 
 import "./Posts.css";
@@ -37,13 +37,29 @@ const mapPosts = (postsArray, launchPostCreationModalWith) => {
   });
 };
 
+const updatePosts = () =>
+  fetch("http://localhost:8080/posts")
+    .then((res) => {
+      if (!res.ok) throw new Error("Error requesting the posts data...");
+      return res.json();
+    })
+    .then((data) => data);
+
 export default function Posts() {
   const [createNewPost, setCreateNewPost] = useState(false);
   const [postsArray, setPostsArray] = useState([]);
-  const [editPostData, setEditPostData] = useState(null)
+  const [editPostData, setEditPostData] = useState(null);
+  const [fetchingData, setFetchingData] = useState(false);
+
+  useEffect(() => {
+    setFetchingData(true);
+    updatePosts()
+      .then((data) => setPostsArray(data))
+      .catch((error) => console.error(error))
+      .finally(() => setFetchingData(false));
+  }, []);
 
   const addPostHandler = (postData = { UID: "", title: "", date: "", tagsArray: "", body: "" }) => {
-
     setPostsArray((prevState) => {
 
       let edited = false
@@ -79,6 +95,9 @@ export default function Posts() {
       <h1>Posts</h1>
       <hr />
       <button onClick={() => setCreateNewPost(true)}>Create new post +</button>
+      {fetchingData ? (
+        <p>Loading...</p>
+      ) : (
       <table id="posts-table">
         <thead>
           <tr>
@@ -88,7 +107,7 @@ export default function Posts() {
           </tr>
         </thead>
         <tbody>{mapPosts(postsArray, launchPostCreationModalWith)}</tbody>
-      </table>
+      </table>)}
       {createNewPost && <PostsCreationModal postData={editPostData} closeModalHandler={closeModalHandler} addNewPost={addPostHandler} />}
     </div>
   );
