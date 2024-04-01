@@ -22,14 +22,20 @@ app.get("/", (req, res) => {
 });
 
 const lookForJsonPostFileExists = () => new Promise((resolve, reject) => {
-  fs.readFile(POSTS_JSON_ABSOLUTE_PATH, (err) => {
-    if (err?.code == "ENOENT")
-      fs.writeFile(POSTS_JSON_ABSOLUTE_PATH, '{"posts":[]}', { encoding: "utf8" }, (err) => {
-        if (err) reject("Error creating the file cms/posts.json");
-        resolve("OK") // The file now exists
-      });
-    else resolve("OK") // The file already exists
-  });
+
+  const folderPath = path.join(__dirname, "/cms")
+  const folderExists = fs.existsSync(folderPath)
+  const filePath = POSTS_JSON_ABSOLUTE_PATH
+  const fileExists = fs.existsSync(filePath)
+
+  try{
+    if(!folderExists) fs.mkdirSync(folderPath)
+    if(!fileExists) fs.writeFileSync(filePath, '{"posts":[]}', {encoding: "utf8"})
+  } catch(err){
+    reject(rrr)
+  }
+
+  resolve("OK")
 })
 
 const readJsonAsync = async (absolutePath) => {
@@ -58,14 +64,15 @@ app.get("/posts", async (req, res) => {
   try {
     jsonPosts = await readJsonAsync(POSTS_JSON_ABSOLUTE_PATH);
     jsonData = JSON.parse(jsonPosts);
+    res.status(200).json(jsonData.posts);
+
   } catch (error) {
+    console.error(error)
     res.status(400).json({
       error: "Error loading posts",
       message: error
     });
   }
-
-  res.status(200).json(jsonData.posts);
 });
 
 app.post("/posts", async (req, res) => {
