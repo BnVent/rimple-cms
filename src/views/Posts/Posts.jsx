@@ -23,7 +23,7 @@ const mapPosts = (postsArray, launchPostCreationModalWith) => {
         hour:"2-digit",
         minute:"2-digit"
       }).toUpperCase()
-    const getTags = () => (data.tagsArray.length == 0 ? "Sin etiquetas" : data.tagsArray.join(", "));
+    const getTags = () => (data.tags.length == 0 ? "Sin etiquetas" : data.tags.join(", "));
 
     return (
       <tr key={index} onClick={() => launchPostCreationModalWith(data)} className="post">
@@ -52,32 +52,28 @@ export default function Posts() {
   const [fetchingData, setFetchingData] = useState(false);
 
   useEffect(() => {
+    updatePostsHandler()
+  }, []);
+
+  function updatePostsHandler(){
     setFetchingData(true);
     updatePosts()
       .then((data) => setPostsArray(data))
       .catch((error) => console.error(error))
       .finally(() => setFetchingData(false));
-  }, []);
+  }
 
-  const addPostHandler = (postData = { UID: "", title: "", date: "", tagsArray: "", body: "" }) => {
-    setPostsArray((prevState) => {
-
-      let edited = false
-
-      prevState.find((post) => {
-        if(post.UID == postData.UID){
-          edited = true
-          post.title = postData.title
-          post.date = postData.date
-          post.tagsArray = postData.tagsArray
-          post.body = postData.body
-        }
-      })
-      
-      if(edited) return [...prevState]
-      else return [...prevState, postData]
-    });
-    setEditPostData(null) // Clearing in case of post edition
+  const addPostHandler = postData => {
+    const options = {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(postData)}
+    fetch("http://localhost:8080/posts", options).then(res => {
+      if(!res.ok) throw("Error submitting the post to server...")
+      return res.json()
+    })
+    .then(result => setPostsArray(result.data))
+    .catch(error => console.error(error))
+    .finally(() => {
+      setEditPostData(null) // Clearing in case of post edition
+    })
   };
 
   const launchPostCreationModalWith = data => {

@@ -22,3 +22,5 @@ yarn-error.log*
 
 site/pages
 site/posts
+
+cms/

@@ -11,17 +11,18 @@ export default function PostsCreationModal({ closeModalHandler, addNewPost, post
   const [tagsStringValue, setTagsStringValue] = useState("")
   const [editModeON, setEditModeON] = useState(false)
 
-  const [UID, setUID] = useState(new Date().getTime()) // For now, the ms time is enough for create a basic UID
+  const [uid, setUid] = useState(new Date().getTime()) // For now, the ms time is enough for create a basic UID
 
   useEffect(() => {
     if(postData !== null){
       setPostTitle(postData.title)
-      setPostTags(postData.tagsArray)
-      setTagsStringValue(postData.tagsArray.toString())
+      setPostTags(postData.tags)
+      setTagsStringValue(postData.tags.toString())
       setPostBody(postData.body)
-      setPostTitleHandler(postData.title)
+      setPostTitle(postData.title)
+      setPostFilename(postData.path)
       setPostDate(getFormattedDateNow(postData.date))
-      setUID(postData.UID)
+      setUid(postData.uid)
       setEditModeON(true)
     }
   }, [])
@@ -60,7 +61,7 @@ export default function PostsCreationModal({ closeModalHandler, addNewPost, post
 
   const addNewPostHandler = () => {
     // Add post
-    addNewPost({ UID: UID, title: postTitle, date: new Date(postDate).getTime(), tagsArray: postTags, body: postBody });
+    addNewPost({ uid: uid, path:postFilename, title: postTitle, date: new Date(postDate).getTime(), tags: postTags, body: postBody });
 
     // Clear data
     setPostTitle("");
