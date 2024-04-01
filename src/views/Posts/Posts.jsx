@@ -17,18 +17,19 @@ const mapPosts = (postsArray, launchPostCreationModalWith) => {
     const getLocaleDate = () =>
       new Date(data.date).toLocaleDateString(undefined, {
         weekday: "short",
-        day: "numeric",
-        month: "numeric",
+        day: "2-digit",
+        month: "2-digit",
         year: "numeric",
-      }).toUpperCase
-    const getLocaleTime = () => new Date(data.date).toLocaleTimeString().slice(0, 5);
+        hour:"2-digit",
+        minute:"2-digit"
+      }).toUpperCase()
     const getTags = () => (data.tagsArray.length == 0 ? "Sin etiquetas" : data.tagsArray.join(", "));
 
     return (
       <tr key={index} onClick={() => launchPostCreationModalWith(data)} className="post">
         <td>{data.title}</td>
         <td>
-          {getLocaleDate()} ({getLocaleTime()})
+          {getLocaleDate()}
         </td>
         <td>{getTags()}</td>
       </tr>
