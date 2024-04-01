@@ -17,7 +17,7 @@
   "scripts": {
     "start": "concurrently --kill-others \"npm run server-start\" \"npm run react-start\"",
     "react-start": "react-scripts start",
-    "server-start": "nodemon server.js",
+    "server-start": "cross-env NODE_ENV=development nodemon server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -43,6 +43,7 @@
   "devDependencies": {
     "concurrently": "^8.2.2",
     "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
     "nodemon": "^3.1.0"
   }
 }
