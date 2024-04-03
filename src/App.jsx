@@ -18,7 +18,7 @@ function App() {
   return (
     <div id="app">
       <nav>
-        <h1>Rimple-CMS</h1>
+        <h1>RINO-CMS</h1>
         <hr />
         <ul>
           <li className={geActiveClass("/")}><Link to="/">Posts</Link></li>
