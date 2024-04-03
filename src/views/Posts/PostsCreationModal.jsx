@@ -1,31 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import { getFormattedDateNow, importMarkdownFile } from "./utils.js";
 
 export default function PostsCreationModal({ closeModalHandler, addNewPost, postData = null }) {
-  const [postTitle, setPostTitle] = useState("");
-  const [postFilename, setPostFilename] = useState("");
-  const [postBody, setPostBody] = useState("");
-  const [postDate, setPostDate] = useState(getFormattedDateNow());
-  const [postTags, setPostTags] = useState([]);
-  const [tagsStringValue, setTagsStringValue] = useState("")
-  const [editModeON, setEditModeON] = useState(false)
-
-  const [uid, setUid] = useState(new Date().getTime()) // For now, the ms time is enough for create a basic UID
-
-  useEffect(() => {
-    if(postData !== null){
-      setPostTitle(postData.title)
-      setPostTags(postData.tags)
-      setTagsStringValue(postData.tags.toString())
-      setPostBody(postData.body)
-      setPostTitle(postData.title)
-      setPostFilename(postData.path)
-      setPostDate(getFormattedDateNow(postData.date))
-      setUid(postData.uid)
-      setEditModeON(true)
-    }
-  }, [])
+  const [postTitle, setPostTitle] = useState(postData?.title ?? "");
+  const [postFilename, setPostFilename] = useState(postData?.path ?? "");
+  const [postBody, setPostBody] = useState(postData?.body ?? "");
+  const [postDate, setPostDate] = useState(postData?.date ? getFormattedDateNow(postData.date) : getFormattedDateNow());
+  const [postTags, setPostTags] = useState(postData?.tags ? postData.tags : []);
+  const [tagsStringValue, setTagsStringValue] = useState(postData?.tags ? postData.tags.toString() : "")
+  const [uid, setUid] = useState(postData?.uid ?? new Date().getTime()) // For now, the ms time is enough for create a basic UID
+  const [editModeON, setEditModeON] = useState(postData ? true : false)
 
   function setPostFilenameHandler(value){
     const regex = /^[0-9a-zA-Z\-]+$/;
